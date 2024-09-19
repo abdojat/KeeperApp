@@ -2,23 +2,19 @@ import React from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Fab from '@mui/material/Fab';
 
-const notesRoute = "https://threebdojapi.onrender.com/notes";
-
-function encodeFormData(data) {
-  return Object.keys(data)
-    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
-}
+const deleteNoteRoute='https://keeperappapi.onrender.com/deleteNote'
 
 function Note(props) {
   function handleClick() {
-    fetch(notesRoute, {
-      method: "DELETE",
+    const token = localStorage.getItem('token');
+    fetch(deleteNoteRoute, {
+      method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
       },
-      body: encodeFormData({
-        noteId: props.id,
+      body: new URLSearchParams({
+        noteId: props._id,
       }),
     })
       .then((response) => {

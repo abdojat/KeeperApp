@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import Zoom from '@mui/material/Zoom';
-const notesRoute = "https://threebdojapi.onrender.com/notes";
-function encodeFormData(data) {
-  return Object.keys(data)
-    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
-}
+
+const addNoteRoute='https://keeperappapi.onrender.com/addNote';
 
 function CreateArea(props) {
   const [note, setNote] = useState({
@@ -30,12 +26,15 @@ function CreateArea(props) {
   }
 
   function submitNote(event) {
-    fetch(notesRoute, {
+    console.log(note);
+    const token = localStorage.getItem('token');
+    fetch(addNoteRoute, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
       },
-      body: encodeFormData({
+      body: new URLSearchParams({
         title: note.title,
         content: note.content,
       }),
@@ -52,6 +51,7 @@ function CreateArea(props) {
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
+
     props.onAdd(note);
     setNote({
       title: "",
@@ -62,25 +62,29 @@ function CreateArea(props) {
 
   return (
     <div>
-      <form className="create-note">
+      <form className="create-note" onSubmit={submitNote}>
         {isExpanded ? (
           <input
+            type="text"
             name="title"
             onChange={handleChange}
             value={note.title}
             placeholder="Title"
+            required
           />
         ) : null}
         <textarea
+          type="text"
           onClick={expand}
           name="content"
           onChange={handleChange}
           value={note.content}
           placeholder="Take a note..."
           rows={isExpanded ? 3 : 1}
+          required
         />
         <Zoom in={isExpanded}>
-          <Fab onClick={submitNote}>
+          <Fab type="submit">
             <AddIcon />
           </Fab>
         </Zoom>
