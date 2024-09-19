@@ -11,6 +11,8 @@ function App() {
     const token = localStorage.getItem('token');
     if (token) {
       console.log("User authenticated, rendering Notes");
+      const user = JSON.parse(atob(token.split('.')[1])).username;
+      setUsername(user);
       setIsAuthenticated(true);
     } else {
       console.log("User not authenticated, rendering LoginRegister");
