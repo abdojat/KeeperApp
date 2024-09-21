@@ -9,7 +9,7 @@ function encodeFormData(data) {
 
 const loginRoute = 'https://keeperappapi.onrender.com/login';
 const registerRoute = 'https://keeperappapi.onrender.com/register';
-const googleAuthRoute = "https://keeperappapi.onrender.com/auth/google";
+const googleAuthRoute = "http://keeperappapi.onrender.com/auth/google";
 
 const Container = styled.div`
   font-family: "Montserrat", sans-serif;

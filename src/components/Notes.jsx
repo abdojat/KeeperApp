@@ -20,7 +20,7 @@ function Notes() {
                 });
                 setNotes(response.data);
             } catch (err) {
-                setErrorMessage('You are not authorized');
+                setErrorMessage(err);
             }
         };
         fetchProtectedData();
