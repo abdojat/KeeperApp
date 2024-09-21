@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import Zoom from '@mui/material/Zoom';
 
-const addNoteRoute='https://keeperappapi.onrender.com/addNote';
+const addNoteRoute = 'https://keeperappapi.onrender.com/addNote';
 
 function CreateArea(props) {
   const [note, setNote] = useState({
@@ -26,7 +26,6 @@ function CreateArea(props) {
   }
 
   function submitNote(event) {
-    console.log(note);
     const token = localStorage.getItem('token');
     fetch(addNoteRoute, {
       method: "POST",

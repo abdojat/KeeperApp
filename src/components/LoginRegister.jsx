@@ -9,11 +9,12 @@ function encodeFormData(data) {
 
 const loginRoute = 'https://keeperappapi.onrender.com/login';
 const registerRoute = 'https://keeperappapi.onrender.com/register';
+const googleAuthRoute = "https://keeperappapi.onrender.com/auth/google";
 
 const Container = styled.div`
   font-family: "Montserrat", sans-serif;
   max-width: 400px;
-  margin: 100px auto;
+  margin: 30px auto;
   padding: 40px; 
   background-color: #f5f5f5;
   border-radius: 5px;
@@ -87,7 +88,7 @@ const LoginRegister = (props) => {
         e.preventDefault();
         setErrorMessage(""); // Clear previous error
         setSuccessMessage(""); // Clear previous success message
-        
+
         const route = isLogin ? loginRoute : registerRoute;
         const bodyData = isLogin
             ? { username: formData.username, password: formData.password }
@@ -101,26 +102,24 @@ const LoginRegister = (props) => {
                 },
                 body: encodeFormData(bodyData),
             });
-
+            const data = await response.json();
             if (!response.ok) {
-                throw new Error("Network response was not ok: " + response.statusText);
+                throw new Error(data.message);
             }
-
-            if (isLogin) {
-                const data = await response.json();
+            else {
                 localStorage.setItem('token', data.token);
                 props.onLogin(data.token);
-            } else {
-                setSuccessMessage("You are successfully registered!");
             }
-
         } catch (error) {
             setErrorMessage(error.message || "Something went wrong");
         }
     };
 
+    const handleGoogleLogin = () => {
+        window.open(googleAuthRoute, "_self"); // Triggers the OAuth flow
+    };
     return (
-        <Container>
+        <Container className="login-register-container" >
             <h2>{isLogin ? 'Login' : 'Register'}</h2>
             <form onSubmit={handleSubmit}>
                 {!isLogin && (
@@ -164,6 +163,7 @@ const LoginRegister = (props) => {
                     {isLogin ? 'Login' : 'Register'}
                 </Button>
             </form>
+            <Button className="login-button google-login" onClick={handleGoogleLogin}>Login with Google</Button>
             <P>
                 {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
                 <Button onClick={toggleForm}>

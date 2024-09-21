@@ -36,7 +36,8 @@ function Header({ onLogout, isAuthenticated ,username}) {
 
   const logoutButtonStyle = {
     backgroundColor: hover ? "#946d00" : "#f5c94e", // Change color on hover
-    border: "none",
+    border : "none",
+    borderRadius: "20px",
     color: "white",
     padding: "10px 20px",
     cursor: "pointer",

@@ -4,18 +4,30 @@ import Footer from "./Footer";
 import Notes from "./Notes";
 import LoginRegister from './LoginRegister';
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 function App() {
   const [username, setUsername] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const token1 = getCookie('token');
     if (token) {
-      console.log("User authenticated, rendering Notes");
       const user = JSON.parse(atob(token.split('.')[1])).username;
       setUsername(user);
       setIsAuthenticated(true);
     } else {
-      console.log("User not authenticated, rendering LoginRegister");
+      if (token1) {
+        localStorage.setItem('token', token1);
+        const user = JSON.parse(atob(token1.split('.')[1])).username;
+        setUsername(user);
+        setIsAuthenticated(true);
+        document.cookie = 'token=; Max-Age=0; path=/;';
+      }
     }
   }, []);
 
